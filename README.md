@@ -1,0 +1,1 @@
+A JS matrix class, 'MatrixUtils2D', is created and various matrix methods are supplied with it.  Alternative approaches are supplied:  matrix objects may be instantiated on the class, or static methods may be invoked directly from it.

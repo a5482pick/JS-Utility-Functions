@@ -1,0 +1,217 @@
+<script>
+
+//Instantiate the matrix and initialise variables for properties.
+function MatrixUtils2D (matrix)   {
+
+    this.matrix = matrix;
+    
+    //var givenWidth = matrix.length;   //Use only when know the returned matrix has same
+    //var givenHeight matrix[0].length; //dimensions as the supplied matrix.
+        
+    //Initialise the array (limit 5 * 5, OR givenWidth * givenHeight).
+    this.returnMatrix = new Array(5);
+    
+    for (var i = 0; i < 10; i++) {
+        
+        this.returnMatrix[i] = new Array(5);
+    }
+    
+    this.trace = 0.0;
+}
+
+
+//Calculate inverse of 2D matrix.
+MatrixUtils2D.prototype.inverse2D = function()   {
+
+    var modifier = 1 / (this.matrix[0][0] * this.matrix[1][1] - this.matrix[0][1] * this.matrix[1][0]);
+
+    this.returnMatrix = [ [this.matrix[1][1], -this.matrix[0][1]] , [-this.matrix[1][0], this.matrix[0][0]] ];
+    
+    return this.scalarMultiply(this.returnMatrix, modifier);
+}
+
+
+//Calculate a 2D matrix multiplied by a scalar.
+MatrixUtils2D.prototype.scalarMultiply = function(matrix, scalar)   {
+
+    for (var i = 0; i < matrix.length; i++)   {
+    
+        for (var j = 0; j < matrix[i].length; j++)   {
+        
+            this.returnMatrix[i][j] = matrix[i][j] * scalar;
+        }
+    }
+    
+    return this.returnMatrix;
+}
+
+
+//Trace of a matrix.
+MatrixUtils2D.prototype.theTrace = function(matrix)   {
+
+    for (var i = 0; i < matrix.length; i++)   {
+    
+        this.trace = this.trace + matrix[i][i];
+    }
+}
+
+
+//Matrices, 2D multiplication.
+//If only one arg provided, calculate matrix1 * matrix1.
+//If two arguments, then multiply them together.
+MatrixUtils2D.prototype.multiplication = function(matrix1)   {
+
+    var matrix1;
+    var matrix2;
+
+    if (arguments.length > 1)   {
+    
+        matrix1 = arguments[0]; 
+        matrix2 = arguments[1];
+    }
+    
+    else   {
+    
+        matrix1 = arguments[0];
+        matrix2 = matrix1;
+    }
+    
+
+    //Perform the multiplication.
+    for (var i = 0; i < matrix1.length; i++)   {
+    
+        for (var j = 0; j < matrix2[i].length; j++)   {
+    
+            var sum = 0;
+            
+            for (var k = 0; k < matrix1[i].length; k++)   {
+            
+                sum = sum + matrix1[i][k] * matrix2[k][j];
+            }
+            
+            this.returnMatrix[i][j] = sum;
+        }
+    }
+    
+    return this.returnMatrix;
+}        
+
+
+
+//Demonstration.
+var matrix = [[1, 2], [3, 4]];
+
+var utils = new MatrixUtils2D(matrix);
+
+utils.multiplication(matrix);
+alert(utils.returnMatrix);
+
+utils.inverse2D();
+alert(utils.returnMatrix);
+
+utils.theTrace(matrix);
+alert(utils.trace);
+
+
+/*------------------------------------------------------------------------*/
+
+//Here, create static methods on the the MatrixUtils2D class.
+
+
+//Calculate inverse of 2D matrix.
+MatrixUtils2D.inverse2D = function(matrix)   {
+
+    var modifier = 1 / (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]);
+
+    var returnMatrix = [ [matrix[1][1], -matrix[0][1]] , [-matrix[1][0], matrix[0][0]] ];
+    
+    return MatrixUtils2D.scalarMultiply(returnMatrix, modifier);
+}
+
+
+//Calculate a 2D matrix multiplied by a scalar.
+MatrixUtils2D.scalarMultiply = function(matrix, scalar)   {
+
+    
+    //Initialise returnMatrix.
+    var matLength = matrix.length;
+    var matHeight = matrix[0].length;
+    
+    var returnMatrix = new Array(matLength);
+    
+    for (var i = 0; i < matLength; i++) {
+        
+        returnMatrix[i] = new Array(matHeight);
+    }
+    
+    for (var i = 0; i < matrix.length; i++)   {
+    
+        for (var j = 0; j < matrix[i].length; j++)   {
+        
+            returnMatrix[i][j] = matrix[i][j] * scalar;
+        }
+    }
+    
+    return returnMatrix;
+}
+
+
+//Trace of a matrix.
+MatrixUtils2D.theTrace = function(matrix)   {
+ 
+    var trace = 0.0;
+
+    for (var i = 0; i < matrix.length; i++)   {
+    
+        trace = trace + matrix[i][i];
+        
+        return trace;
+    }
+}
+
+
+//Matrices, 2D multiplication.
+MatrixUtils2D.multiplication = function(matrix1, matrix2)   {
+
+    //Initialise the result matrix.
+    var matLength = matrix1.length;
+    var matHeight = matrix2[0].length;
+    
+    var result = new Array(matLength);
+    
+    for (var i = 0; i < matLength; i++) {
+        
+        result[i] = new Array(matHeight);
+    }
+
+    //Perform the multiplication.
+    for (var i = 0; i < matrix1.length; i++)   {
+    
+        for (var j = 0; j < matrix2[i].length; j++)   {
+    
+            var sum = 0;
+            
+            for (var k = 0; k < matrix1[i].length; k++)   {
+            
+                sum = sum + matrix1[i][k] * matrix2[k][j];
+            }
+            
+            result[i][j] = sum;
+        }
+    }
+    
+    return result;
+}        
+
+//Demonstration.
+alert(MatrixUtils2D.inverse2D(matrix));
+
+alert(MatrixUtils2D.theTrace(matrix));
+
+alert(MatrixUtils2D.scalarMultiply(matrix, 2.0));
+
+var matrix1 = [[1, 2], [3, 4]];
+var matrix2 = [[1, 1], [2, 2]];
+alert(MatrixUtils2D.multiplication(matrix1, matrix2));
+
+</script>
